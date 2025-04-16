@@ -16,8 +16,6 @@ USER $USER
 WORKDIR $WORKDIR
 
 ADD --chown=buildbot:buildbot keys/*.asc /builder/keys/
-RUN gpg --import /builder/keys/*.asc && rm -rf /builder/keys/
-
 COPY --chmod=0755 setup.sh /builder/setup.sh
 
 ENV DOWNLOAD_FILE=$DOWNLOAD_FILE \

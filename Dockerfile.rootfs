@@ -1,0 +1,35 @@
+FROM ghcr.io/openwrt/buildbot/buildworker-v3.11.8:v21 as builder
+
+ARG DOWNLOAD_FILE="imagebuilder-.*x86_64.tar.[xz|zst]"
+ARG TARGET=x86/64
+ARG FILE_HOST=downloads.openwrt.org
+ARG VERSION_PATH
+
+ENV DOWNLOAD_FILE=$DOWNLOAD_FILE
+ENV TARGET=$TARGET
+ENV FILE_HOST=$FILE_HOST
+ENV VERSION_PATH=$VERSION_PATH
+
+USER root
+WORKDIR /builder/rootfs
+
+ADD --chown=buildbot:buildbot keys/*.asc /builder/keys/
+COPY --chmod=0755 setup.sh /builder/setup.sh
+
+RUN /builder/setup.sh
+
+FROM scratch
+
+ARG CMD=/bin/ash
+ARG USER=root
+
+ENV CMD=$CMD
+ENV USER=$USER
+
+COPY --from=builder  /builder/rootfs/ /
+
+ENTRYPOINT [ ]
+
+# required to have CMD as ENV to be executed
+ENV CMD_ENV=${CMD}
+CMD ${CMD_ENV}
