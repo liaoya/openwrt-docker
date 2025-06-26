@@ -1,6 +1,14 @@
 ARG BASE_IMAGE=ghcr.io/openwrt/buildbot/buildworker-v3.11.8:v21
 
 FROM $BASE_IMAGE
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN set -eux && \
+    apt-get update -qy && \
+    apt-get install -qy --no-install-recommends \
+        nano && \
+    rm -rf /var/lib/apt/lists/*
+
 ARG USER=buildbot
 ARG WORKDIR=/builder/
 ARG CMD="/bin/bash"
