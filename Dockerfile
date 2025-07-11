@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN set -eux && \
     apt-get update -qy && \
     apt-get install -qy --no-install-recommends \
-        nano && \
+        nano vim && \
     rm -rf /var/lib/apt/lists/*
 
 ARG USER=buildbot
